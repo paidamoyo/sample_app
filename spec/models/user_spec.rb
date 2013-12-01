@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe User do
 
-  before do 
+  before do
   	 @user = User.new(name: "Example User", email: "user@example.com",
                    password: "foobar", password_confirmation: "foobar")
   	end
@@ -13,6 +13,7 @@ describe User do
   it {should respond_to(:password_digest)}
   it {should respond_to(:password)}
   it {should respond_to(:password_confirmation)}
+  it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
 
   it{should be_valid}
@@ -61,12 +62,12 @@ describe "with a password that's too short" do
   it { should be_invalid }
 end
 
-  describe "when name is not present" do 
+  describe "when name is not present" do
   	before {@user.name = " "}
   	it {should_not be_valid}
   end
 
-describe "when email is not present" do 
+describe "when email is not present" do
   	before {@user.email = " "}
   	it {should_not be_valid}
   end
@@ -94,6 +95,11 @@ describe "when email format is invalid" do
         @user.email = valid_address
         expect(@user).to be_valid
       end
+
     end
+  end
+  describe "remember token" do
+    before { @user.save }
+    it { expect(@user.remember_token).not_to be_blank }
   end
 end
